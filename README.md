@@ -1,5 +1,5 @@
 # MCZ -> Git Migration
-[![Build Status](https://travis-ci.org/peteruhnak/git-migration.svg?branch=master)](https://travis-ci.org/peteruhnak/git-migration) [![Coverage Status](https://coveralls.io/repos/github/peteruhnak/git-migration/badge.svg?branch=master)](https://coveralls.io/github/peteruhnak/git-migration?branch=master)
+[![Build Status](https://travis-ci.org/pharo-contributions/git-migration.svg?branch=master)](https://travis-ci.org/pharo-contributions/git-migration) [![Coverage Status](https://coveralls.io/repos/github/pharo-contributions/git-migration/badge.svg?branch=master)](https://coveralls.io/github/pharo-contributions/git-migration?branch=master)
 
 Utility to migrate code from SmalltalkHub (or any MCZ-based repo) to Git.
 
@@ -13,7 +13,7 @@ The output is in **Tonel** format.
 ```smalltalk
 Metacello new
 	baseline: 'GitMigration';
-	repository: 'github://peteruhnak/git-migration/repository';
+	repository: 'github://pharo-contributions/git-migration/repository';
 	load
 ```
 

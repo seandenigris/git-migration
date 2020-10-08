@@ -8,6 +8,8 @@ The output is in **Tonel** format.
 
 ## Installation
 
+* git installed in the system and available in `PATH`
+
 **Pharo 7**
 
 ```smalltalk
@@ -22,48 +24,29 @@ Pharo 6 is **not** supported.
 Table Of Contents
 
 * [Installation](#installation)
-* [Possible Issues](#possible-issues)
 * [Usage - Quick Example](#usage---quick-example)
 * [Usage - Detailed Example](#usage---detailed-example)
 * [Extras](#extras)
 * [Visualizations](#visualizations)
 	* see pretty pictures of your MCZ history before you decide to migrate
+* [Possible Issues](#possible-issues)
 * [For Developers](#for-developers)
 	* digging in the internals
 
-
-## Possible Issues
-
-This tool has been used in countless successful migrations, however it is possible that you will run into a very special edge case™. Feel free to open an issue, contact me directly, on Pharo's mailing list or Discord.
-
-* **Corrupted MCZs:** Sometimes the MCZ that is on SmalltalkHub is corrupted. Although the MCZ contains a "backup" in form of a fileout, Pharo cannot actually correctly read this most of the time. The recommended solution is to just add the MCZ name to `#ignoredFileNames:`.
-	* ![corrupted version](figures/corrupted-version.png)
-* **Private emails on GitHub:** If you use private email on GitHub, you will need to provide your GitHub-generated alias, otherwise the push will be rejected. This applies only to the email of the person pushing to GitHub, not all committers.
-
-* performance
-	* downloading MCZs -- GitMigration is downloading *all* of your project MCZs from SmalltalkHub. This can take a while depending on the quality of your connection and how SmalltalkHub feels on any particular day
-	* converting (in Pharo) -- each MCZ is read from disk, parsed, and written back to disk in a different format; this can take a while for large projects
-		* e.g. PolyMath with 800 commits across 70 packages took ~3 minutes on a stock HDD
-	* importing (Git) -- this should be under a minute; in most cases it will probably take couple of seconds
-
-* MCVersion dependencies are not supported (but I don't think they were used outside of Slices)
-	* if you don't know what this is, you probably don't need to care
-* preserving proper merge history (see  also [#4](https://github.com/peteruhnak/git-migration/issues/4))
-	* after many hours burned on this I've concluded that there is no way to do a fully automated 1:1 migration; note that your data/commits are not lost, only the merge history will not be as rich.
-
-## Prerequisites
-
-* git installed in the system and available in `PATH`
-* **Pharo 7**
 
 ## Usage - Quick Example
 
 This tool generates a file for [git-fast-import](https://git-scm.com/docs/git-fast-import).
 
 
-### 1. Add Source Repository
+### 1. Add Source Repository 
 
 Add your source repository (SmalltalkHub) to Pharo, e.g. via Monticello Browser
+
+### 1. Git repo 
+
+* Define your git repo. 
+* Use iceberg to clone it and publish the metadata. This way you will have a first commit.
 
 ### 2. Find The Initial Commit SHA
 
@@ -221,6 +204,21 @@ Get the total ordering of all commits across all packages
 allVersionsOrdered := migration commitOrder.
 ```
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## Visualizations
 
 This requires [Roassal](http://agilevisualization.com/) to be installed (available in catalog).
@@ -293,6 +291,29 @@ Adding labels works the same way
 ```
 visualization showProjectAncestryOn: aCollectionOfPackages withLabels: aBoolean
 ```
+
+
+
+## Possible Issues
+
+This tool has been used in countless successful migrations, however it is possible that you will run into a very special edge case™. Feel free to open an issue, contact me directly, on Pharo's mailing list or Discord.
+
+* **Corrupted MCZs:** Sometimes the MCZ that is on SmalltalkHub is corrupted. Although the MCZ contains a "backup" in form of a fileout, Pharo cannot actually correctly read this most of the time. The recommended solution is to just add the MCZ name to `#ignoredFileNames:`.
+	* ![corrupted version](figures/corrupted-version.png)
+* **Private emails on GitHub:** If you use private email on GitHub, you will need to provide your GitHub-generated alias, otherwise the push will be rejected. This applies only to the email of the person pushing to GitHub, not all committers.
+
+* performance
+	* downloading MCZs -- GitMigration is downloading *all* of your project MCZs from SmalltalkHub. This can take a while depending on the quality of your connection and how SmalltalkHub feels on any particular day
+	* converting (in Pharo) -- each MCZ is read from disk, parsed, and written back to disk in a different format; this can take a while for large projects
+		* e.g. PolyMath with 800 commits across 70 packages took ~3 minutes on a stock HDD
+	* importing (Git) -- this should be under a minute; in most cases it will probably take couple of seconds
+
+* MCVersion dependencies are not supported (but I don't think they were used outside of Slices)
+	* if you don't know what this is, you probably don't need to care
+* preserving proper merge history (see  also [#4](https://github.com/peteruhnak/git-migration/issues/4))
+	* after many hours burned on this I've concluded that there is no way to do a fully automated 1:1 migration; note that your data/commits are not lost, only the merge history will not be as rich.
+
+
 
 ## For Developers
 

@@ -87,6 +87,7 @@ cd D:/tmp/breaking-mcz2
 git fast-import < import.txt
 git reset --hard master
 git gc
+git push
 ```
 
 ## Usage - Detailed Example

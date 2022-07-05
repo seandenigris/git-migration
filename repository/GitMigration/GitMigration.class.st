@@ -8,6 +8,7 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'authors',
+		'branch',
 		'repository',
 		'cachedVersions',
 		'completeAncestryCache',
@@ -16,7 +17,8 @@ Class {
 		'allAuthors',
 		'selectedPackageNames',
 		'onEmptyMessage',
-		'ignoredFileNames'
+		'ignoredFileNames',
+		'writerClass'
 	],
 	#category : #GitMigration
 }
@@ -59,6 +61,16 @@ GitMigration >> authorsInSnapshot: aSnapshot [
 			(each isClassDefinition and: [ (each isKindOf: MCClassTraitDefinition) not ])
 				ifTrue: [ timeStamps add: each commentStamp ] ].
 	^ (timeStamps collect: [ :each | each copyUpTo: Character space ]) \ #('' '<historical>')
+]
+
+{ #category : #accessing }
+GitMigration >> branch [
+	^ branch
+]
+
+{ #category : #accessing }
+GitMigration >> branch: anObject [
+	branch := anObject
 ]
 
 { #category : #actions }
@@ -169,9 +181,11 @@ GitMigration >> fastImportCodeToDirectory: aDirectoryName initialCommit: anIniti
 	aFileReference asFileReference
 		ensureDelete;
 		writeStreamDo: [ :rawStream | 
-			writer := GitMigrationTonelWriter new on: rawStream.
-			writer exportDirectory: aDirectoryName.
-			writer onEmptyMessage: onEmptyMessage.
+			writer := self writerClass new on: rawStream.
+			writer 
+				exportDirectory: aDirectoryName;
+				onEmptyMessage: onEmptyMessage;
+				branch: self branch.
 			self createFastImportAt: anInitialCommitish usingWriter: writer ].
 	^ writer commitMarks
 ]
@@ -362,4 +376,15 @@ GitMigration >> versionsWithPackageNames [
 { #category : #visualizations }
 GitMigration >> visualization [
 	^ GitMigrationVisualization new migration: self
+]
+
+{ #category : #accessing }
+GitMigration >> writerClass [
+	^ writerClass ifNil: [ GitMigrationTonelWriter ]
+]
+
+{ #category : #accessing }
+GitMigration >> writerClass: aClass [
+	"aClass - See GitMigrationFastImportWriter sublcasses"
+	writerClass := aClass
 ]

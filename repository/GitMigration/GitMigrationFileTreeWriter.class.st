@@ -15,7 +15,7 @@ GitMigrationFileTreeWriter >> writeDeletePackageFor: aVersion [
 GitMigrationFileTreeWriter >> writeVersion: aVersion [
 	| repository memoryFileOut commitInfo |
 	commitInfo := self commitInfoFor: aVersion.
-	fastWriter writeCommitPreambleFor: commitInfo.
+	fastWriter writeCommitPreambleFor: commitInfo toBranchNamed: self branch.
 	(self commitMarkFor: commitInfo) = 1
 		ifTrue: [ fastWriter writeLine: 'from ' , initialCommit ].
 	(memoryFileOut := (FileSystem store: GitFastImportMemoryStore new) root / exportDirectory)

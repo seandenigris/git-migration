@@ -7,6 +7,7 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'authorMapping',
+		'branch',
 		'committerName',
 		'initialCommit',
 		'availableVersions',
@@ -44,6 +45,16 @@ GitMigrationFastImportWriter >> authorsInSnapshot: aSnapshot [
 { #category : #accessing }
 GitMigrationFastImportWriter >> availableVersions: aCollection [
 	availableVersions := (aCollection collect: [ :each | each -> true ]) asDictionary
+]
+
+{ #category : #accessing }
+GitMigrationFastImportWriter >> branch [
+	^ branch ifNil: [ 'master' ]
+]
+
+{ #category : #accessing }
+GitMigrationFastImportWriter >> branch: aString [
+	branch := aString
 ]
 
 { #category : #converting }

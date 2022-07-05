@@ -16,7 +16,7 @@ GitMigrationTonelWriter >> ensureContainsOrganization: aVersion [
 	aVersion snapshot definitions
 		detect: #isOrganizationDefinition
 		ifFound: [ :each | each ]
-		ifNone: [ aVersion snapshot definitions add: (MCOrganizationDefinition categories: {aVersion package name}) ]
+		ifNone: [ aVersion snapshot initializeWithDefinitions: (aVersion snapshot definitions copyWith: (MCOrganizationDefinition categories: {aVersion package name})) ]
 ]
 
 { #category : #writing }
@@ -56,7 +56,7 @@ GitMigrationTonelWriter >> writePropertiesFileTo: aDirectory [
 GitMigrationTonelWriter >> writeVersion: aVersion [
 	| commitInfo memoryStore |
 	commitInfo := self commitInfoFor: aVersion.
-	fastWriter writeCommitPreambleFor: commitInfo.
+	fastWriter writeCommitPreambleFor: commitInfo toBranchNamed: self branch.
 	(self commitMarkFor: commitInfo) = 1
 		ifTrue: [ fastWriter writeLine: 'from ' , initialCommit ].
 	memoryStore := self newMemoryStore / exportDirectory.
